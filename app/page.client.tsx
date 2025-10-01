@@ -32,6 +32,7 @@ export default function MainPageClient() {
 
         // calculating total price with cart products
         // need this for price calculation
+        // eslint-disable-next-line prefer-const
         let cartProducts: cartProductType[] = []
 
         for (const cartItem of cart) {
