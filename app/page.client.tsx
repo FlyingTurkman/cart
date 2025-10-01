@@ -55,7 +55,7 @@ export default function MainPageClient() {
         className="container mx-auto my-10"
         >
             <div
-            className="flex flex-row items-start"
+            className="flex flex-col lg:flex-row items-start"
             >
                 <div
                 className="flex flex-col basis-full lg:basis-3/4 gap-4 p-2"
@@ -83,7 +83,7 @@ export default function MainPageClient() {
 
                 {/* Total price seciton */}
                 <div
-                className="flex flex-col basis-full lg:basis-1/4 p-2 gap-4"
+                className="flex flex-col w-full lg:w-auto basis-full lg:basis-1/4 p-2 gap-4"
                 >
                     <Card>
                         <CardHeader>

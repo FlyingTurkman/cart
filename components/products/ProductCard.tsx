@@ -84,7 +84,7 @@ export default function ProductCard({
                         </Label>
                         <Separator/>
                         <div
-                        className="flex flex-row items-center gap-4"
+                        className="flex flex-row items-center justify-between lg:justify-start gap-4"
                         >
                             <Button
                             variant={'outline'}
@@ -112,7 +112,7 @@ export default function ProductCard({
                             </Button>
                         </div>
                         <div
-                        className="flex flex-row items-center gap-2"
+                        className="flex flex-col lg:flex-row items-center gap-2"
                         >
                             {count != product.count && (
                                 <Button
