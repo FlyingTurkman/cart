@@ -25,3 +25,16 @@ export type cartCookieType = {
 export type cartProductType = productType & {
     count: number
 }
+
+export type responseType = {
+    status: boolean,
+    message?: string
+}
+
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            homeDomain: string
+        }
+    }
+}

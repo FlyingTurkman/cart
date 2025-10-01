@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  env: {
+    homeDomain: process.env.homeDomain
+  },
   assetPrefix: '/cart-static',
   basePath: '/cart',
   async headers() {

@@ -5,6 +5,7 @@ import MainMenu from "@/components/layout/MainMenu";
 import SiteContextProvider from "@/context/SiteContextProvider";
 import { productType } from "@/types";
 import { apiBasePath } from "@/lib/src/constants";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default async function RootLayout({
         >
           <MainMenu/>
           {children}
+          <Toaster/>
         </body>
       </SiteContextProvider>
     </html>

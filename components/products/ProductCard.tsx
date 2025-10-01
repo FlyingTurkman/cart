@@ -9,6 +9,10 @@ import ProductStars from "./ProductStars"
 import { Button } from "../ui/button"
 import { IoAdd, IoRemove } from "react-icons/io5"
 import { useState } from "react"
+import { Separator } from "../ui/separator"
+import { toast } from "sonner"
+import { updateBasketItem } from "@/actions/updateBasketItem"
+import { useSiteContext } from "@/context/SiteContextProvider"
 
 
 
@@ -27,6 +31,10 @@ export default function ProductCard({
 }: {
     product: cartProductType
 }) {
+
+    const { setCart } = useSiteContext()
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const [count, setCount] = useState<number>(product.count)
     return (
@@ -68,12 +76,17 @@ export default function ProductCard({
                                 ({product.rating.count})
                             </Label>
                         </div>
-                         <div
+                        <Separator/>
+                        <div
                         className="flex flex-row items-center gap-4"
                         >
                             <Button
                             variant={'outline'}
                             size={'icon'}
+                            disabled={count == 1}
+                            onClick={() => {
+                                setCount((prev) => prev == 1 ? 1 : prev - 1)
+                            }}
                             >
                                 <IoRemove/>
                             </Button>
@@ -85,8 +98,30 @@ export default function ProductCard({
                             <Button
                             variant={'outline'}
                             size={'icon'}
+                            onClick={() => {
+                                setCount((prev) => prev + 1)
+                            }}
                             >
                                 <IoAdd/>
+                            </Button>
+                        </div>
+                        <div
+                        className="flex flex-row items-center gap-2"
+                        >
+                            {count != product.count && (
+                                <Button
+                                onClick={updateCartProductFunction}
+                                disabled={isLoading}
+                                >
+                                    Güncelle
+                                </Button>
+                                
+                            )}
+                            <Button
+                            variant={'destructive'}
+                            disabled={isLoading}
+                            >
+                                Kaldır
                             </Button>
                         </div>
                     </div>
@@ -94,4 +129,59 @@ export default function ProductCard({
             </CardContent>
         </Card>
     )
+
+    async function updateCartProductFunction() {
+
+        if (isLoading) return 
+
+        setIsLoading(true)
+
+        try {
+            
+            const res = await fetch(`${process.env.homeDomain}/api/cartApi/${product.id}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    count
+                })
+            })
+
+            const fetchResponse = await res.json()
+
+            if (res.status != 200) {
+                toast.error('İşlem başarısız.', {
+                    description: fetchResponse
+                })
+
+                setIsLoading(false)
+                return
+            }
+
+            const response = await updateBasketItem({
+                productId: product.id,
+                count
+            })
+
+            if (!response.status) {
+                toast.error('İşlem başarısız.', {
+                    description: response.message
+                })
+            }else {
+                toast.success('İşlem başarılı.', {
+                    description: response.message
+                })
+
+                if (response.cart) {
+                    setCart(response.cart)
+                }
+            }
+
+            
+        } catch (error) {
+            console.log('Error: ', error)
+
+            toast.error('Beklenmedik bir hata meydana geldi.')
+        }
+
+        setIsLoading(false)
+    }
 }
