@@ -34,7 +34,7 @@ export default function MainMenu() {
     }, [pathname])
     return (
         <div
-        className="bg-primary text-primary-foreground sticky top-0 left-0"
+        className="bg-primary text-primary-foreground sticky top-0 left-0 z-50"
         >
             <div
             className="flex flex-row items-center mx-auto container justify-between w-full p-4"
