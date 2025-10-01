@@ -52,7 +52,7 @@ export async function updateBasketItem(data: cartCookieType): Promise<updateBask
             }
         })
 
-        cookieStore.set('cart', JSON.stringify(newCartItems), { expires: Date.now() + 1000 * 60 * 60 * 24 * 30})
+        cookieStore.set('cart', JSON.stringify(newCartItems), { expires: Date.now() + 1000 * 60 * 60 * 24 * 30 })
 
         revalidatePath('/cart')
         

@@ -13,6 +13,7 @@ import { Separator } from "../ui/separator"
 import { toast } from "sonner"
 import { updateBasketItem } from "@/actions/updateBasketItem"
 import { useSiteContext } from "@/context/SiteContextProvider"
+import { removeProductFromBasket } from "@/actions/removeProductFromBasket"
 
 
 
@@ -120,6 +121,7 @@ export default function ProductCard({
                             <Button
                             variant={'destructive'}
                             disabled={isLoading}
+                            onClick={removeProductFromBasketFunction}
                             >
                                 Kaldır
                             </Button>
@@ -180,6 +182,56 @@ export default function ProductCard({
             console.log('Error: ', error)
 
             toast.error('Beklenmedik bir hata meydana geldi.')
+        }
+
+        setIsLoading(false)
+    }
+
+    async function removeProductFromBasketFunction() {
+        if (isLoading) return
+
+        setIsLoading(true)
+
+        try {
+            
+            const res = await fetch(`${process.env.homeDomain}/api/cartApi/${product.id}`, {
+                method: 'DELETE'
+            })
+
+            const fetchResponse = await res.json()
+
+            if (res.status != 200) {
+
+                toast.error('İşlem başarısız.', {
+                    description: fetchResponse
+                })
+
+                setIsLoading(false)
+
+                return
+            }
+
+            const response = await removeProductFromBasket(product.id)
+
+            if (!response.status) {
+                toast.error('İşlem başarısız.', {
+                    description: response.message
+                })
+            } else {
+                toast.success('İşlem başarılı.', {
+                    description: response.message
+                })
+
+                if (response.cart) {
+                    setCart(response.cart)
+                }
+            }
+        } catch (error) {
+            console.log('Error: ', error)
+
+            toast.error('İşlem başarısız.', {
+                description: 'Beklenmedik bir hata meydana geldi.'
+            })
         }
 
         setIsLoading(false)

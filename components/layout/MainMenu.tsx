@@ -7,6 +7,8 @@ import Link from "next/link"
 import { Button, buttonVariants } from "../ui/button"
 import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
+import { useSiteContext } from "@/context/SiteContextProvider"
+import { Label } from "../ui/label"
 
 
 
@@ -21,7 +23,7 @@ import { usePathname, useRouter } from "next/navigation"
 
 export default function MainMenu() {
 
-    const router = useRouter()
+    const { cart } = useSiteContext()
 
     const pathname = usePathname()
 
@@ -41,19 +43,27 @@ export default function MainMenu() {
                 <div
                 className="hidden lg:flex flex-row items-center gap-4"
                 >
-                    <Link
+                    <a
                     href={'/'}
                     className={buttonVariants({ variant: 'ghost' })}
                     >
                         Ana Sayfa
-                    </Link>
-                    <a
+                    </a>
+                    <Link
                     href={'/cart'}
                     className={buttonVariants({ variant: 'ghost' })}
-
                     >
                         Sepetim
-                    </a>
+                        {cart.length > 0 && (
+                            <div
+                            className="flex w-6 h-6 rounded-full shrink-0 bg-destructive text-primary-foreground items-center justify-center"
+                            >
+                                <Label>
+                                    {cart.length <= 9 ? cart.length : '+9'}
+                                </Label>
+                            </div>
+                        )}
+                    </Link>
                 </div>
 
                 {/* Mobile menu */}
@@ -78,18 +88,27 @@ export default function MainMenu() {
                                 </SheetTitle>
                             </SheetHeader>
                             <Separator/>
-                            <Link
+                            <a
                             href={'/'}
                             className={buttonVariants({ variant: 'link', className: '!justify-start' })}
                             >
                                 Ana Sayfa
-                            </Link>
-                            <a
+                            </a>
+                            <Link
                             href={'/cart'}
                             className={buttonVariants({ variant: 'link', className: '!justify-start' })}
                             >
                                 Sepetim
-                            </a>
+                                {cart.length > 0 && (
+                                    <div
+                                    className="flex w-6 h-6 rounded-full shrink-0 bg-destructive text-primary-foreground items-center justify-center"
+                                    >
+                                        <Label>
+                                            {cart.length <= 9 ? cart.length : '+9'}
+                                        </Label>
+                                    </div>
+                                )}
+                            </Link>
                         </SheetContent>
                     </Sheet>
                 </div>
