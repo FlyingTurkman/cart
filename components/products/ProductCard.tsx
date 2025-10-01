@@ -77,6 +77,11 @@ export default function ProductCard({
                                 ({product.rating.count})
                             </Label>
                         </div>
+                        <Label
+                        className="text-xl"
+                        >
+                            {(product.price * count).toFixed(2)} $
+                        </Label>
                         <Separator/>
                         <div
                         className="flex flex-row items-center gap-4"
