@@ -14,7 +14,7 @@ import { cookies } from "next/headers";
 
 
 
-
+// getting basket items
 
 export async function getBasketItems(): Promise<cartCookieType[]> {
     try {

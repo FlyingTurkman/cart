@@ -1,5 +1,6 @@
 'use server'
 
+import { tokenExpiryTime } from "@/lib/src/constants";
 import { cartCookieType, responseType } from "@/types";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -33,6 +34,7 @@ export async function updateBasketItem(data: cartCookieType): Promise<updateBask
 
         const items: cartCookieType[] = JSON.parse(store)
 
+        // finding item for create new one or overwrite
         const cartItem: cartCookieType | undefined = items.find((item) => item.productId == data.productId)
 
         if (!cartItem) {
@@ -46,14 +48,15 @@ export async function updateBasketItem(data: cartCookieType): Promise<updateBask
 
             if (item.productId.toString() == data.productId.toString()) {
 
-                return data
+                return data // if item exist returning data
             } else {
-                return item
+                return item // if item doesnt exist returning current data
             }
         })
 
-        cookieStore.set('cart', JSON.stringify(newCartItems), { expires: Date.now() + 1000 * 60 * 60 * 24 * 30 })
+        cookieStore.set('cart', JSON.stringify(newCartItems), { expires: Date.now() + tokenExpiryTime }) // setting 1 month
 
+        // revalidate for menu cart item count
         revalidatePath('/cart')
         
         return {

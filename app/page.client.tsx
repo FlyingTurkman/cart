@@ -30,6 +30,8 @@ export default function MainPageClient() {
 
     useEffect(() => {
 
+        // calculating total price with cart products
+        // need this for price calculation
         let cartProducts: cartProductType[] = []
 
         for (const cartItem of cart) {
@@ -43,8 +45,6 @@ export default function MainPageClient() {
                 })
             }
         }
-
-        
 
         setSelectedProducts(cartProducts)
     }, [cart, allProducts])
@@ -79,6 +79,8 @@ export default function MainPageClient() {
                         }
                     })}
                 </div>
+
+                {/* Total price seciton */}
                 <div
                 className="flex flex-col basis-full lg:basis-1/4 p-2 gap-4"
                 >

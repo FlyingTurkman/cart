@@ -1,4 +1,4 @@
-import { apiBasePath } from "@/lib/src/constants";
+import { apiBasePath, tokenExpiryTime } from "@/lib/src/constants";
 import { cartCookieType, cartProductType } from "@/types";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
             return NextResponse.json('Lütfen ürün sayısı giriniz.', { status: 400 })
         }
 
+        // check for is product exist at db
         const res = await fetch(`${apiBasePath}/products/${productId}`)
 
         const response = await res.json()
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
 
         if (!store) {
 
+            // if cart empty adding data directly
             items = [{
                 productId: Number(productId),
                 count
@@ -55,16 +57,24 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
 
             
         } else {
+
+            // if cart not empty pushing new one
+
             items = JSON.parse(store)
 
             const existItem = items.find((i) => i.productId.toString() == productId)
 
             if (!existItem) {
+
+                // if item not exist adding
                 items = [...items, {
                     productId: Number(productId),
                     count
                 }]
             } else {
+
+                // if item exist mapping and adding count
+
                 items = items.map((item) => {
 
                     if (item.productId.toString() == productId) {
@@ -80,7 +90,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
             }
         }
 
-        cookieStore.set('cart', JSON.stringify(items))
+        cookieStore.set('cart', JSON.stringify(items), { expires: Date.now() + tokenExpiryTime }) // set 1 month
 
         return NextResponse.json('Ürün sepete başarıyla eklendi.', { status: 200 })
 

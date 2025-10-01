@@ -47,10 +47,11 @@ export default async function RootLayout({
   );
 }
 
+
+// getting all products from database and sending context
+// using for price listing and price calculating
 async function getAllProducts(): Promise<productType[]> {
   try {
-    
-
     const res = await fetch(`${apiBasePath}/products`)
 
     const response = await res.json()

@@ -17,6 +17,8 @@ type removeProductFromBasketresponseType = responseType & { cart?: cartCookieTyp
 export async function removeProductFromBasket(productId: number): Promise<removeProductFromBasketresponseType> {
 
     try {
+
+        // get cookie for cart items
         const cookieStore = await cookies()
 
         const store = cookieStore.get('cart')?.value
@@ -30,10 +32,12 @@ export async function removeProductFromBasket(productId: number): Promise<remove
 
         const items: cartCookieType[] = JSON.parse(store)
 
+        // filter cart items and remove selected product
         const newItems: cartCookieType[] = items.filter((item) => item.productId != productId)
 
-        cookieStore.set('cart', JSON.stringify(newItems), { expires: Date.now() + 1000 * 60 * 60 * 24 * 30})
+        cookieStore.set('cart', JSON.stringify(newItems), { expires: Date.now() + 1000 * 60 * 60 * 24 * 30}) // setting 1 month
 
+        // revalidate for cart item count
         revalidatePath('/cart')
 
         return {
