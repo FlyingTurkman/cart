@@ -17,6 +17,10 @@ export type productType = {
     }
 }
 
+export type cartCookieType = {
+    productId: number,
+    count: number
+}
 
 export type cartProductType = productType & {
     count: number
